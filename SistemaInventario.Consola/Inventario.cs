@@ -6,7 +6,7 @@ namespace SistemaInventario.Consola
 {
     internal class Inventario
     {
-        private List<Producto> Productos();
+        private List<Producto> Productos;
 
         public Inventario()
         {
@@ -15,19 +15,18 @@ namespace SistemaInventario.Consola
 
         public void AgregarProducto(Producto producto)
         {
-            Productos().Add(producto);
+            Productos.Add(producto);
         }
 
-        public void BuscarPorCodigo(string codigo)
+        public Producto BuscarPorCodigo(string codigo)
         {
-            foreach (Productos Producto in Productos)
+            foreach (Producto Producto in Productos)
 
                 if (Producto.Codigo == codigo)
                 {
-                    Console.WriteLine($"Producto encontrado: {Producto.Nombre}, Precio: {Producto.Precio}");
-                    return;
+                    return Producto;
                 }
-            Console.WriteLine("Producto no encontrado.");
+                 return null;
         }
 
         public void ListarProductos()

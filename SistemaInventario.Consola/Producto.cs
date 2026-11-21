@@ -6,10 +6,10 @@ namespace SistemaInventario.Consola
 {
     internal class Producto
     {
-        public string Codigo { get; set; } = "";
-        public string Nombre { get; set; } = "";
-        public decimal Precio { get; set; }
-        public int Cantidad { get; set; }
+        public string Codigo { get; }
+        public string Nombre { get; private set; }
+        public decimal Precio { get; private set; }
+        public int Cantidad { get; private set; }
 
         public Producto (string codigo, string nombre, decimal precio, int cantidad)
         {

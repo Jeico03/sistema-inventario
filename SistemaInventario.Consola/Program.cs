@@ -1,56 +1,141 @@
-﻿namespace SistemaInventario.Consola
+﻿using System;
+
+namespace SistemaInventario.Consola
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-           
-            Producto Laptop = new Producto();
-            Producto Mouse = new Producto();
-            Producto Teclado = new Producto();
+            Inventario inventario = new Inventario();
+            int opcion = -1;
 
-            Laptop.Codigo = "P001";
-            Laptop.Nombre = "Laptop";
-            Laptop.Precio = 100m;
-            Laptop.Cantidad = 5;
+            do
+            {
+                Console.WriteLine();
+                Console.WriteLine("===== SISTEMA DE INVENTARIO =====");
+                Console.WriteLine("1. Registrar producto");
+                Console.WriteLine("2. Listar productos");
+                Console.WriteLine("3. Buscar producto por código");
+                Console.WriteLine("4. Actualizar precio");
+                Console.WriteLine("5. Agregar existencias");
+                Console.WriteLine("6. Consultar valor total");
+                Console.WriteLine("0. Salir");
+                Console.Write("Seleccione una opción: ");
 
-            Mouse.Codigo = "P002";
-            Mouse.Nombre = "Mouse";
-            Mouse.Precio = 250m;
-            Mouse.Cantidad = 0;
+                try
+                {
+                    opcion = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine();
 
-            Teclado.Codigo = "P003";
-            Teclado.Nombre = "Teclado";
-            Teclado.Precio = 50m;
-            Teclado.Cantidad = 10;
+                    switch (opcion)
+                    {
+                        case 1:
+                            Console.Write("Código: ");
+                            string codigo = Console.ReadLine();
+                            Console.Write("Nombre: ");
+                            string nombre = Console.ReadLine();
+                            Console.Write("Precio: ");
+                            decimal precio = Convert.ToDecimal(Console.ReadLine());
+                            Console.Write("Cantidad inicial: ");
+                            int cantidad = Convert.ToInt32(Console.ReadLine());
 
-            Console.WriteLine("=== Laptop ===");
-            Laptop.MostrarInformacion();
-            Console.WriteLine($"Valor total: RD${Laptop.CalcularValorTotal():N2}");
+                            Producto nuevo = new Producto(codigo, nombre, precio, cantidad);
 
-            Console.WriteLine("\n=== Mouse ===");
-            Mouse.MostrarInformacion();
-            Console.WriteLine($"Valor total: RD${Mouse.CalcularValorTotal():N2}");
+                            if (inventario.AgregarProducto(nuevo))
+                            {
+                                Console.WriteLine("Producto agregado.");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Registro rechazado: el código ya existe.");
+                            }
+                            break;
 
-            Console.WriteLine("\n=== Teclado ===");
-            Teclado.MostrarInformacion();
-            Console.WriteLine($"Valor total: RD${Teclado.CalcularValorTotal():N2}");
+                        case 2:
+                            inventario.ListarProductos();
+                            break;
 
-            // Modificar el precio de un producto: los demás no cambian
-            Console.WriteLine("\n--- Se cambia el precio del Teclado a RD$75.00 ---");
-            Teclado.Precio = 75m;
+                        case 3:
+                            Console.Write("Código a buscar: ");
+                            Producto encontrado = inventario.BuscarPorCodigo(Console.ReadLine());
 
-            Console.WriteLine("\n=== Laptop (sin cambios) ===");
-            Laptop.MostrarInformacion();
-            Console.WriteLine($"Valor total: RD${Laptop.CalcularValorTotal():N2}");
+                            if (encontrado == null)
+                            {
+                                Console.WriteLine("El producto no existe.");
+                            }
+                            else
+                            {
+                                encontrado.MostrarInformacion();
+                            }
+                            break;
 
-            Console.WriteLine("\n=== Mouse (sin cambios) ===");
-            Mouse.MostrarInformacion();
-            Console.WriteLine($"Valor total: RD${Mouse.CalcularValorTotal():N2}");
+                        case 4:
+                            Console.Write("Código del producto: ");
+                            Producto producto = inventario.BuscarPorCodigo(Console.ReadLine());
 
-            Console.WriteLine("\n=== Teclado (precio modificado) ===");
-            Teclado.MostrarInformacion();
-            Console.WriteLine($"Valor total: RD${Teclado.CalcularValorTotal():N2}");
+                            if (producto == null)
+                            {
+                                Console.WriteLine("El producto no existe.");
+                            }
+                            else
+                            {
+                                Console.Write("Nuevo precio: ");
+                                decimal nuevoPrecio = Convert.ToDecimal(Console.ReadLine());
+                                producto.ActualizarPrecio(nuevoPrecio);
+                                Console.WriteLine("Precio actualizado.");
+                            }
+                            break;
+
+                        case 5:
+                            Console.Write("Código del producto: ");
+                            Producto producto = inventario.BuscarPorCodigo(Console.ReadLine());
+
+                            if (producto == null)
+                            {
+                                Console.WriteLine("El producto no existe.");
+                            }
+                            else
+                            {
+                                Console.Write("Cantidad a agregar: ");
+                                int agregar = Convert.ToInt32(Console.ReadLine());
+                                producto.AgregarExistencia(agregar);
+                                Console.WriteLine($"Existencia actualizada. Cantidad actual: {producto.Cantidad}");
+                            }
+                            break;
+
+                        case 6:
+                            Console.Write("Código del producto: ");
+                            Producto paraValor = inventario.BuscarPorCodigo(Console.ReadLine());
+
+                            if (paraValor == null)
+                            {
+                                Console.WriteLine("El producto no existe.");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"Valor total: RD${paraValor.CalcularValorTotal():N2}");
+                            }
+                            break;
+
+                        case 0:
+                            Console.WriteLine("Saliendo...");
+                            break;
+
+                        default:
+                            Console.WriteLine("Opción no válida.");
+                            break;
+                    }
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine($"Operación rechazada: {ex.Message}");
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Entrada inválida. Debe escribir un número.");
+                }
+
+            } while (opcion != 0);
         }
     }
 }
