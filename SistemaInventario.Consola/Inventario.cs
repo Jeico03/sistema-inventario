@@ -13,9 +13,14 @@ namespace SistemaInventario.Consola
             Productos = new List<Producto>();
         }
 
-        public void AgregarProducto(Producto producto)
+        public bool AgregarProducto(Producto producto)
         {
-            Productos.Add(producto);
+            if (BuscarPorCodigo(producto.Codigo) == null)
+            {
+                Productos.Add(producto);
+                return true;
+            }
+            return false;
         }
 
         public Producto BuscarPorCodigo(string codigo)
@@ -38,7 +43,45 @@ namespace SistemaInventario.Consola
             }
         }
 
+        public void CalcularPreciosFinales()
+        {
+            foreach (Producto producto in Productos)
+            {
+                Console.WriteLine($"{producto.Nombre}: RD${producto.CalcularPrecioFinal():N2}" );
+            }
+        }
 
+        public void ConsultarExistencias(string codigo)
+        {
+            Producto producto = BuscarPorCodigo(codigo);
 
+            if (producto == null)
+            {
+                Console.WriteLine("Producto no encontrado.");
+                return;
+            }
+
+            Console.WriteLine($"Producto: {producto.Nombre}");
+            Console.WriteLine($"Existencias: {producto.Cantidad}");
+        }
+
+        public void AplicarDescuento(string codigo, decimal porcentaje)
+        {
+            Producto producto = BuscarPorCodigo(codigo);
+
+            if (producto is IDescontable descontable)
+            {
+                descontable.AplicarDescuento(porcentaje);
+                Console.WriteLine("Descuento aplicado correctamente.");
+            }
+            else if (producto == null)
+            {
+                Console.WriteLine("Producto no encontrado.");
+            }
+            else
+            {
+                Console.WriteLine("Este producto no admite descuentos.");
+            }
+        }
     }
 }

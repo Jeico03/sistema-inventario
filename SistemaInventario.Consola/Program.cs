@@ -71,9 +71,9 @@ namespace SistemaInventario.Consola
 
                         case 4:
                             Console.Write("Código del producto: ");
-                            Producto producto = inventario.BuscarPorCodigo(Console.ReadLine());
+                            Producto Actualizarproducto = inventario.BuscarPorCodigo(Console.ReadLine());
 
-                            if (producto == null)
+                            if (Actualizarproducto == null)
                             {
                                 Console.WriteLine("El producto no existe.");
                             }
@@ -81,16 +81,16 @@ namespace SistemaInventario.Consola
                             {
                                 Console.Write("Nuevo precio: ");
                                 decimal nuevoPrecio = Convert.ToDecimal(Console.ReadLine());
-                                producto.ActualizarPrecio(nuevoPrecio);
+                                Actualizarproducto.ActualizarPrecio(nuevoPrecio);
                                 Console.WriteLine("Precio actualizado.");
                             }
                             break;
 
                         case 5:
                             Console.Write("Código del producto: ");
-                            Producto producto = inventario.BuscarPorCodigo(Console.ReadLine());
+                            Producto Agregarproducto = inventario.BuscarPorCodigo(Console.ReadLine());
 
-                            if (producto == null)
+                            if (Agregarproducto == null)
                             {
                                 Console.WriteLine("El producto no existe.");
                             }
@@ -98,8 +98,8 @@ namespace SistemaInventario.Consola
                             {
                                 Console.Write("Cantidad a agregar: ");
                                 int agregar = Convert.ToInt32(Console.ReadLine());
-                                producto.AgregarExistencia(agregar);
-                                Console.WriteLine($"Existencia actualizada. Cantidad actual: {producto.Cantidad}");
+                                Agregarproducto.AgregarExistencia(agregar);
+                                Console.WriteLine($"Existencia actualizada. Cantidad actual: {Agregarproducto.Cantidad}");
                             }
                             break;
 
