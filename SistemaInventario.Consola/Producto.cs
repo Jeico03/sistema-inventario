@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SistemaInventario.Consola
 {
-    internal class Producto
+    internal abstract class Producto
     {
         public string Codigo { get; }
         public string Nombre { get; private set; }
@@ -13,12 +13,12 @@ namespace SistemaInventario.Consola
 
         public Producto (string codigo, string nombre, decimal precio, int cantidad)
         {
-            if (string.IsNullOrWhiteSpace(Codigo) || string.IsNullOrWhiteSpace(Nombre))
+            if (string.IsNullOrWhiteSpace(codigo) || string.IsNullOrWhiteSpace(nombre))
             {
                 throw new ArgumentException("El código y el nombre del producto no pueden estar vacíos.");
             }
 
-            if (Precio <= 0 || Cantidad <= 0)
+            if (precio <= 0 || cantidad <= 0)
             {
                 throw new ArgumentException("El precio y la cantidad del producto deben ser mayores que cero.");
             }
@@ -29,12 +29,15 @@ namespace SistemaInventario.Consola
             Cantidad = cantidad;
         }
 
+        public abstract decimal calcularPrecioFinal();
+
         public void MostrarInformacion()
         {
             Console.WriteLine($"Código: {Codigo}");
             Console.WriteLine($"Nombre: {Nombre}");
             Console.WriteLine($"Precio: RD${Precio:N2}");
             Console.WriteLine($"Cantidad: {Cantidad}");
+            Console.WriteLine($"Precio Final: RD${CalcularPrecioFinal():N2}");
         }
 
         public decimal CalcularValorTotal()
